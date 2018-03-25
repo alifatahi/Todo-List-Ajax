@@ -31,11 +31,19 @@
                 </div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
+                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Cras justo odio
+                        </li>
+                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Dapibus ac
+                            facilisis in
+                        </li>
+                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Morbi leo risus
+                        </li>
+                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Porta ac
+                            consectetur ac
+                        </li>
+                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Vestibulum at
+                            eros
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -49,14 +57,18 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title" id="title">Add New Task</h4>
             </div>
             <div class="modal-body">
-                <p>One fine body&hellip;</p>
+                <p><input type="text" placeholder="Write Tasks" id="addItem" class="form-control"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-warning" id="delete" data-dismiss="modal" style="display: none">
+                    Delete
+                </button>
+                <button type="button" class="btn btn-primary" id="saveChanges" style="display: none">Save changes
+                </button>
+                <button type="button" class="btn btn-primary" id="AddButton">Add</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -73,5 +85,29 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    // Edit Modal
+    $(document).ready(function () {
+        // Loop through each Items
+        $('.ourItem').each(function () {
+            // when click on each item
+            $(this).click(function () {
+                // Pass Text of each item
+                var text = $(this).text();
+                $('#title').text('Edit Task');
+                // Add Value to input
+                $('#addItem').val(text);
+                //Show Delete btn on edit Modal
+                $('#delete').show('100');
+                //Show Save btn on edit Modal
+                $('#saveChanges').show('100');
+                //Hide Add btn on edit Modal
+                $('#AddButton').hide('100');
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
