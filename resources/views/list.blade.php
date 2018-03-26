@@ -24,7 +24,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">ToDo List
-                        <a href="#" data-toggle="modal" data-target="#myModal" class="pull-right">
+                        <a href="#" id="addNew" data-toggle="modal" data-target="#myModal" class="pull-right">
                             <i class="fa fa-plus-square" aria-hidden="true"></i>
                         </a>
                     </h3>
@@ -74,6 +74,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+{{csrf_field()}}
 
 <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -106,7 +107,35 @@
                 $('#AddButton').hide('100');
             });
         });
+
+        // Add New Modal
+        $('#addNew').click(function () {
+            // Pass Text
+            $('#title').text('Add New Task');
+            // Add Value to input
+            $('#addItem').val('');
+            //Hide Delete btn on edit Modal
+            $('#delete').hide('100');
+            //Hide Save btn on edit Modal
+            $('#saveChanges').hide('100');
+            //Show Add btn on edit Modal
+            $('#AddButton').show('100');
+        });
+
+        // Form
+        $('#AddButton').click(function () {
+            //Get Input Value
+            var text = $('#addItem').val();
+            //Ajax
+            //Url , Data | Token , CallBack
+            $.post('create',
+                {'text': text, '_token': $('input[name=_token]').val()},
+                function (data) {
+                    console.log(data);
+                });
+        });
     });
+
 </script>
 
 </body>
