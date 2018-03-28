@@ -18,7 +18,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view('list');
+        $tasks = Item::all();
+        return view('list', compact('tasks'));
     }
 
     /**
@@ -33,6 +34,14 @@ class TaskController extends Controller
         $task->task = $request->text;
         $task->save();
 
+        return 'Done';
+    }
+
+
+
+    public function remove(Request $request)
+    {
+        Item::where('id',$request->id)->delete();
         return 'Done';
     }
 }

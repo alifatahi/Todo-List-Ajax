@@ -9,6 +9,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
@@ -29,21 +30,14 @@
                         </a>
                     </h3>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="items">
                     <ul class="list-group">
-                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Cras justo odio
-                        </li>
-                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Dapibus ac
-                            facilisis in
-                        </li>
-                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Morbi leo risus
-                        </li>
-                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Porta ac
-                            consectetur ac
-                        </li>
-                        <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">Vestibulum at
-                            eros
-                        </li>
+                        @foreach($tasks as $task)
+                            <li class="list-group-item ourItem" data-toggle="modal" data-target="#myModal">
+                                <input type="hidden" id="itemId" value="{{$task->id}}">
+                                {{$task->task}}
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -60,6 +54,7 @@
                 <h4 class="modal-title" id="title">Add New Task</h4>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="id">
                 <p><input type="text" placeholder="Write Tasks" id="addItem" class="form-control"></p>
             </div>
             <div class="modal-footer">
@@ -68,7 +63,7 @@
                 </button>
                 <button type="button" class="btn btn-primary" id="saveChanges" style="display: none">Save changes
                 </button>
-                <button type="button" class="btn btn-primary" id="AddButton">Add</button>
+                <button type="button" class="btn btn-primary" id="AddButton" data-dismiss="modal">Add</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -90,29 +85,32 @@
 <script type="text/javascript">
     // Edit Modal
     $(document).ready(function () {
-        // Loop through each Items
-        $('.ourItem').each(function () {
-            // when click on each item
-            $(this).click(function () {
-                // Pass Text of each item
-                var text = $(this).text();
-                $('#title').text('Edit Task');
-                // Add Value to input
-                $('#addItem').val(text);
-                //Show Delete btn on edit Modal
-                $('#delete').show('100');
-                //Show Save btn on edit Modal
-                $('#saveChanges').show('100');
-                //Hide Add btn on edit Modal
-                $('#AddButton').hide('100');
-            });
+        //Use Document so each things has they own functionality
+        $(document).on('click', '.ourItem', function () {
+            //Cache text
+            var text = $(this).text();
+            // Cache ID By Find Id of Item
+            var id = $(this).find('#itemId').val();
+            //Change Title
+            $('#title').text('Edit Task');
+            // Add Value to input
+            // use trim Method to skip extra Space
+            $('#addItem').val($.trim(text));
+            //Show Delete btn on edit Modal
+            $('#delete').show('100');
+            //Show Save btn on edit Modal
+            $('#saveChanges').show('100');
+            //Hide Add btn on edit Modal
+            $('#AddButton').hide('100');
+            // Pass Id of Item
+            $('#id').val(id);
         });
 
         // Add New Modal
-        $('#addNew').click(function () {
+        $(document).on('click', '#addNew', function () {
             // Pass Text
             $('#title').text('Add New Task');
-            // Add Value to input
+            // Add Value to input Which is NULL
             $('#addItem').val('');
             //Hide Delete btn on edit Modal
             $('#delete').hide('100');
@@ -122,17 +120,35 @@
             $('#AddButton').show('100');
         });
 
-        // Form
+        // Add Button in Form
         $('#AddButton').click(function () {
             //Get Input Value
             var text = $('#addItem').val();
             //Ajax
             //Url , Data | Token , CallBack
             $.post('create',
+                //here we declare first text as name of column and second as value
                 {'text': text, '_token': $('input[name=_token]').val()},
                 function (data) {
                     console.log(data);
+                    //Load Page After Add new Task
+                    //Load is Ajax method that very powerful (URL,Data,CallBack)
+                    // Space in ' #items' is very important
+                    $('#items').load(location.href + ' #items');
                 });
+        });
+
+        // Delete
+        $('#delete').click(function () {
+            // Cache & Get ID of Item
+            var id = $('#id').val();
+            //Ajax For Remove
+            //pass id and csrf
+            $.post('remove', {'id': id, '_token': $('input[name=_token]').val()}, function (data) {
+                //Load Page after Done
+                $('#items').load(location.href + ' #items');
+                console.log(data);
+            });
         });
     });
 
