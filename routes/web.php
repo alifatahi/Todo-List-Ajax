@@ -5,3 +5,5 @@ Route::get('/', 'TaskController@index');
 Route::post('create', 'TaskController@create');
 //Delete
 Route::post('remove', 'TaskController@remove');
+//Update
+Route::post('update', 'TaskController@update');

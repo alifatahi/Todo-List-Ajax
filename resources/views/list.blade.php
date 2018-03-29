@@ -61,7 +61,8 @@
                 <button type="button" class="btn btn-warning" id="delete" data-dismiss="modal" style="display: none">
                     Delete
                 </button>
-                <button type="button" class="btn btn-primary" id="saveChanges" style="display: none">Save changes
+                <button type="button" class="btn btn-primary" id="saveChanges" data-dismiss="modal"
+                        style="display: none">Save changes
                 </button>
                 <button type="button" class="btn btn-primary" id="AddButton" data-dismiss="modal">Add</button>
             </div>
@@ -124,6 +125,10 @@
         $('#AddButton').click(function () {
             //Get Input Value
             var text = $('#addItem').val();
+            //Check If Not Empty
+            if(text == ''){
+                alert('Please Type Your Task');
+            }
             //Ajax
             //Url , Data | Token , CallBack
             $.post('create',
@@ -145,6 +150,21 @@
             //Ajax For Remove
             //pass id and csrf
             $.post('remove', {'id': id, '_token': $('input[name=_token]').val()}, function (data) {
+                //Load Page after Done
+                $('#items').load(location.href + ' #items');
+                console.log(data);
+            });
+        });
+
+        // Edit
+        $('#saveChanges').click(function () {
+            // Cache & Get ID of Item
+            var id = $('#id').val();
+            //Cache Value
+            var value = $('#addItem').val();
+            //Ajax For Remove
+            //pass id , Value and csrf
+            $.post('update', {'id': id, 'value': value, '_token': $('input[name=_token]').val()}, function (data) {
                 //Load Page after Done
                 $('#items').load(location.href + ' #items');
                 console.log(data);

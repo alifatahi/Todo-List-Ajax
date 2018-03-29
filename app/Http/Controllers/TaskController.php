@@ -37,11 +37,29 @@ class TaskController extends Controller
         return 'Done';
     }
 
+    /**
+     *  Update method
+     * @param Request $request
+     */
+    public function update(Request $request)
+    {
+        // Find Item & Update
+        $task = Item::findOrFail($request->id);
+        $task->task = $request->value;
+        $task->save();
+    }
 
 
+    /**
+     *  Delete Method
+     * @param Request $request
+     * @return string
+     * @throws \Exception
+     */
     public function remove(Request $request)
     {
-        Item::where('id',$request->id)->delete();
+        // Find Item and Remove it
+        Item::where('id', $request->id)->delete();
         return 'Done';
     }
 }
