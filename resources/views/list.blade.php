@@ -16,11 +16,18 @@
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CDN For Auto Search -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"/>
 </head>
 <body>
 <br>
 <div class="container">
     <div class="row">
+        <div class="col-lg-offset-3 col-lg-6">
+            <input type="text" class="form-control" name="searchItem" id="searchItem" placeholder="Search For Task">
+        </div>
+        <br>
+        <br>
         <div class="col-lg-offset-3 col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -30,6 +37,7 @@
                         </a>
                     </h3>
                 </div>
+
                 <div class="panel-body" id="items">
                     <ul class="list-group">
                         @foreach($tasks as $task)
@@ -83,6 +91,9 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
+<!-- CDN For Auto Search -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript">
     // Edit Modal
     $(document).ready(function () {
@@ -126,7 +137,7 @@
             //Get Input Value
             var text = $('#addItem').val();
             //Check If Not Empty
-            if(text == ''){
+            if (text == '') {
                 alert('Please Type Your Task');
             }
             //Ajax
@@ -168,6 +179,15 @@
                 //Load Page after Done
                 $('#items').load(location.href + ' #items');
                 console.log(data);
+            });
+        });
+
+        //Method for AutoSearch
+        $(function () {
+            //Get Input & Use autocomplete Method for get Result
+            $("#searchItem").autocomplete({
+                //Route For Get Result
+                source: 'http://localhost/Todo-List-Ajax/public/search'
             });
         });
     });

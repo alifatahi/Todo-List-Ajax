@@ -7,3 +7,5 @@ Route::post('create', 'TaskController@create');
 Route::post('remove', 'TaskController@remove');
 //Update
 Route::post('update', 'TaskController@update');
+//Search
+Route::get('search', 'TaskController@search');

@@ -62,4 +62,29 @@ class TaskController extends Controller
         Item::where('id', $request->id)->delete();
         return 'Done';
     }
+
+
+    /**
+     *  Ajax Search
+     * @param Request $request
+     * @return array
+     */
+    public function search(Request $request)
+    {
+        //Get Result
+        $term = $request->term;
+        //Query For Search
+        $tasks = Item::where('task', 'LIKE', '%' . $term . '%')->get();
+        //Check Count
+        if (count($tasks) == 0) {
+            // Make Result as Array
+            $result[] = 'No Item Found';
+        } else {
+            foreach ($tasks as $key => $value) {
+                $result[] = $value->task;
+            }
+        }
+
+        return $result;
+    }
 }
